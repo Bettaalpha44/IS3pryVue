@@ -3,7 +3,7 @@ const db = require('../../../config/db');
 
 const getUserById = async (id) => {
   const connection = await db; // Espera a que la conexión esté lista
-  const [rows] = await connection.query('SELECT * FROM coordinador WHERE numIdentificacion = ?', [id]);
+  const [rows] = await connection.query('SELECT * FROM usuario WHERE numIdentificacion = ?', [id]);
   return rows[0];
 };
 

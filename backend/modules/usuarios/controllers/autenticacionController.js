@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const pool = require('../../../config/db');
+const db = require('../../../config/db');
 
 const SECRET_KEY = '309823';
 
@@ -9,26 +9,50 @@ const SECRET_KEY = '309823';
 UNA PARA DOCENTE Y OTRA DIFERENTE PARA COORDINADOR TALVEZ NECESITE HACER DOS ENDPOINTS O TRAER LO QUE EL ESCOGIÓ ALLÁ
 Y AQUI HACER UN IF CON ESO QUE EL ESCOGIÓ*/
 const register = async (req, res) => {
-  const { tipoIdentificacion, numIdentificacion, correoInstitucional, nombres, apellidos, nombreUsuario, contrasenia } = req.body;
+  const { 
+    tipoIdentificacion, numIdentificacion, correoInstitucional, nombres, apellidos, nombreUsuario, contrasenia, tipoDocente, ultimoTitulo 
+  } = req.body;
 
   // Encriptar la contraseña antes de guardarla
   const hashedPassword = await bcrypt.hash(contrasenia, 10);
 
   try {
-    const [result] = await pool.query('INSERT INTO usuarios (tipoIdentificacion, numIdentificacion, correoInstitucional, nombres, apellidos, nombreUsuario, contrasenia) VALUES (?, ?, ?, ?, ?, ?, ?)'
-        , [tipoIdentificacion, numIdentificacion, correoInstitucional, nombres, apellidos, nombreUsuario, hashedPassword]);
-    res.status(201).json({ message: 'Usuario registrado con éxito', userId: result.insertId });
+    const connection = await db;
+    // Insertar usuario
+    const [userResult] = await connection.query(
+      'INSERT INTO usuario (tipoIdentificacion, numIdentificacion, correoInstitucional, nombres, apellidos, rol, nombreUsuario, contrasenia, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [tipoIdentificacion, numIdentificacion, correoInstitucional, nombres, apellidos, 'Docente', nombreUsuario, hashedPassword, 1]
+    );    
+
+    // Obtener el userId generado
+    const userId = userResult.insertId;
+
+    // Insertar docente
+    const [docenteResult] = await connection.query(
+      'INSERT INTO docente (idUsuario, tipoDocente, ultimoTitulo) VALUES (?, ?, ?)',
+      [userId, tipoDocente, ultimoTitulo]
+    );
+
+    // Responder al cliente
+    res.status(201).json({ 
+      message: 'Usuario y docente registrados con éxito', 
+      userId: userId, // Incluye el ID generado
+      docenteId: docenteResult.insertId // ID del docente también
+    });
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 // Inicio de sesión
 const login = async (req, res) => {
   const { nombreUsuario, contrasenia } = req.body;
 
   try {
-    const [rows] = await pool.query('SELECT * FROM coordinador WHERE nombreUsuario = ?', [nombreUsuario]);
+    const connection = await db;
+    const [rows] = await connection.query('SELECT * FROM usuario WHERE nombreUsuario = ?', [nombreUsuario]);
     const user = rows[0];
 
     if (!user) {
@@ -44,8 +68,10 @@ const login = async (req, res) => {
     }
 
     // Crear el token JWT
-    const token = jwt.sign({ userId: user.id, role: user.role }, SECRET_KEY, { expiresIn: '1h' });
-    res.json({ token });
+    const token = jwt.sign({ userId: user.idUsuario, role: user.rol }, SECRET_KEY, { expiresIn: '1h' });
+
+    // Enviar el token en la respuesta
+    res.json({ message: 'Inicio de sesión exitoso', token });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
