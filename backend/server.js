@@ -1,5 +1,4 @@
 const express = require('express');
-const mysql = require('mysql2');
 const cors = require('cors');
 
 const app = express();
@@ -11,11 +10,11 @@ app.listen(3000, () => {
 });
 
 
-//const productRoutes = require('./modules/products/routes/productRoutes');
-const usuarioRoutes = require('./modules/usuarios/routes/usuarioRoutes');
+//const usuarioRoutes = require('./modules/usuarios/routes/usuarioRoutes');
+const autenticacionRoutes = require('./modules/usuarios/routes/autenticacionRoutes');
 
 
 app.use(express.json()); // Para parsear JSON
-//app.use('/api/products', productRoutes);
-app.use('/api/usuarios', usuarioRoutes);
+//app.use('/api/usuarios', usuarioRoutes);
+app.use('/api/autenticacion', autenticacionRoutes);
   
