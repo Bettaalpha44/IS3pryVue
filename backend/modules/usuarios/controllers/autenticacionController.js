@@ -45,6 +45,7 @@ const register = async (req, res) => {
 
 // Inicio de sesión
 const login = async (req, res) => {
+  console.log('Solicitud recibida:', req.body);
   const { nombreUsuario, contrasenia } = req.body;
 
   try {
