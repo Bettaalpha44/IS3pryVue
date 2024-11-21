@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import RegistroUsuario from '../modules/usuario/components/RegistroUsuario.vue';
 import LoginUsuario from '@/modules/usuario/components/LoginUsuario.vue';
+//import LoginUsu2 from '@/modules/usuario/components/LoginUsu2.vue';
 
 
 

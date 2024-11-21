@@ -1,30 +1,25 @@
 <template>
-    <!-- Aplica clases flex para asegurar que ocupe toda la pantalla -->
-    <div class="d-flex flex-column min-vh-100" id="formulario">
-        <!-- Contenido principal -->
-        <div class="bg-secondary d-flex flex-grow-1 align-items-center justify-content-center">
-            
-                <form @submit.prevent="loguearse" class="bg-primary m-4 flex-grow-1 p-3" style="max-width: 1000px; width: 100%; border-radius: 8px;">
-                    <h2>Login</h2>
-                    <div class="">
+    <div class="min-vh-100 d-flex flex-column" id="formulario">
+        <main class="bg-secondary d-flex flex-grow-1 align-items-center justify-content-center">
+            <div class="p-3 mx-auto my-auto bg-primary " style="max-width: 1000px; width: 100%; border-radius: 8px;">
+                <h2>Login</h2>
+                <form @submit.prevent="loguearse">
+                    <div class="mb-3">
                         <label class="form-label">Nombre de usuario</label>
                         <input class="form-control" v-model="usuario.nombreUsuario">
                     </div>
 
-                    <div class="">
+                    <div class="mb-3">
                         <label class="form-label">Contraseña</label>
-                        <input class="form-control" type="password" v-model="usuario.contrasenia">
+                        <input class="form-control" v-model="usuario.contrasenia">
                     </div>
-                    <button type="submit" class="btn btn-success mt-2">Entrar</button>
+                    <button type="submit" class="btn btn-success">Entrar</button>
                 </form>
-        </div>
-
-        <!-- Footer que estará siempre al final -->
-        <div class="bg-dark text-white text-center">
-            <div class="m-4">
-                <p>Si tiene dudas o problemas contáctenos: nombre@unicauca.edu.co</p>
             </div>
-        </div>
+        </main>
+        <footer class="bg-dark text-white text-center d-flex align-items-center justify-content-center" style="height: 50px;">
+            <p>Si tiene dudas o problemas contactenos: nombre@unicauca.edu.co</p>
+        </footer>
     </div>
 </template>
 

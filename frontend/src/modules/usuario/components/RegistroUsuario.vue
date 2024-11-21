@@ -7,7 +7,7 @@
         
       </div>
 
-      <button type="submit" class="btn btn-primary">Registrarse</button>
+      <button type="submit" class="btn btn-primary">Rempalago</button>
     </form>
     </div>
   </div>
