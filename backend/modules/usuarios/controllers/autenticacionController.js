@@ -6,6 +6,7 @@ const SECRET_KEY = '309823';
 
 // Registro de usuario
 const register = async (req, res) => {
+  console.log('Accede a registrar', req.body);
   const { 
     tipoIdentificacion, numIdentificacion, correoInstitucional, nombres, apellidos, nombreUsuario, contrasenia, tipoDocente, ultimoTitulo 
   } = req.body;
@@ -90,6 +91,7 @@ const authenticate = (req, res, next) => {
   jwt.verify(token, SECRET_KEY, (err, decoded) => {
     if (err) return res.status(400).send('Token inválido');
     req.user = decoded; // Almacenar la información del usuario decodificada
+    console.log('Sigue, tiene token');
     next();
   });
 };
@@ -97,11 +99,11 @@ const authenticate = (req, res, next) => {
 const authorize = (roles) => {
   return (req, res, next) => {
     const userRole = req.user.role;
-
+    console.log('Rol:', userRole);
     if (!roles.includes(userRole)) {
       return res.status(403).send('Acceso denegado. No tienes los permisos suficientes');
     }
-
+    console.log('Sigue, tiene rol permitido');
     next(); // Si el usuario tiene el rol adecuado, continuar
   };
 };

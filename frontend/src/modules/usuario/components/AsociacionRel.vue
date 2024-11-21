@@ -1,22 +1,37 @@
 <template>
     <!-- Aplica clases flex para asegurar que ocupe toda la pantalla -->
     <div class="d-flex flex-column min-vh-100" id="formulario">
+        <div class="bg-dark text-white text-center">
+            <div class="m-4">
+                <p>Header</p>
+            </div>
+        </div>
         <!-- Contenido principal -->
         <div class="bg-secondary d-flex flex-grow-1 align-items-center justify-content-center">
-            
-                <form @submit.prevent="loguearse" class="bg-primary m-4 flex-grow-1 p-3" style="max-width: 1000px; width: 100%; border-radius: 8px;">
-                    <h2>Login</h2>
-                    <div class="">
-                        <label class="form-label">Nombre de usuario</label>
-                        <input class="form-control" v-model="usuario.nombreUsuario">
+            <form @submit.prevent="loguearse" class="bg-primary m-4 flex-grow-1 p-3" style="max-width: 1000px; width: 100%; border-radius: 8px;">
+                <h2>Login</h2>
+
+                <!-- División del formulario en dos columnas -->
+                <div class="row">
+                    <!-- Primera columna -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre de usuario</label>
+                            <input class="form-control" v-model="usuario.nombreUsuario">
+                        </div>
                     </div>
 
-                    <div class="">
-                        <label class="form-label">Contraseña</label>
-                        <input class="form-control" type="password" v-model="usuario.contrasenia">
+                    <!-- Segunda columna -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Contraseña</label>
+                            <input class="form-control" type="password" v-model="usuario.contrasenia">
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-success mt-2">Entrar</button>
-                </form>
+                </div>
+
+                <button type="submit" class="btn btn-success mt-2">Entrar</button>
+            </form>
         </div>
 
         <!-- Footer que estará siempre al final -->
@@ -49,7 +64,6 @@ export default {
                 console.log('Token:', response.data.token);
                 alert('Usuario mandado');
                 localStorage.setItem('token', response.data.token);
-                
             } catch (error) {
                 console.error('Error al hacer el login', error);
             }
